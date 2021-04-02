@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.jboss.logging.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +31,7 @@ public class UserController {
 	
 	@GetMapping
 	public ResponseEntity<List<User>> findAll() {
-		
+		MDC.clear();
 		return ResponseEntity.ok(userService.findAll());
 		
 	}
@@ -50,19 +51,20 @@ public class UserController {
 	
 	@PostMapping
 	public ResponseEntity<User> insert(@RequestBody User u) {
-		
+		MDC.clear();
 		return ResponseEntity.accepted().body(userService.insert(u));
 	}
 	
 	@PutMapping("/update")
 	public ResponseEntity<User> update(@RequestBody User u) {
-		
+		MDC.clear();
 		return ResponseEntity.accepted().body(userService.update(u));
 	}
 
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable("id") int id) {
+		MDC.clear();
 		return ResponseEntity.ok(userService.delete(id));
 	}
 	

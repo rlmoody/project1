@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.jboss.logging.MDC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +26,15 @@ public class UserService {
 	@Autowired
 	private UserDAO userDAO;
 	
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+	
 	public List<User> findAll() {
+		
+		MDC.put("event", "Find All Users");
+		
+		log.info("Search for all users");
 		return userDAO.findAll();
+		
 	}
 	
 	public User findById(int id) {
@@ -44,15 +54,24 @@ public class UserService {
 		
 		userDAO.save(u);
 		
+		MDC.put("event", "Create User");
+		
+		log.info("Creating new User");
+		
 		return u;
 	}
 	
 	public boolean delete(int id) {
+		
 		if(!userDAO.existsById(id)) {
 			return false;
 		}
 		
 		userDAO.deleteById(id);
+		
+		MDC.put("event", "Delete User");
+		
+		log.info("Deleting User");
 		
 		return true;
 	}
@@ -61,6 +80,10 @@ public class UserService {
 		if(!userDAO.existsById(u.getId())) {
 			throw new RuntimeException("User must already exist to update");
 		}
+		
+		MDC.put("event", "Update User");
+		
+		log.info("Updating User");
 		
 		userDAO.save(u);
 		
